@@ -2800,6 +2800,7 @@ window.addEventListener('DOMContentLoaded', function () {
   feedSlider.init();
   var player = new _modules_playVideo__WEBPACK_IMPORTED_MODULE_2__["default"]('.showup .play', '.overlay');
   player.init();
+  new _modules_difference__WEBPACK_IMPORTED_MODULE_3__["default"]('.officerold', '.officernew', '.officer__card-item').init();
 });
 
 /***/ }),
@@ -2832,18 +2833,29 @@ function () {
 
     this.oldOfficer = document.querySelector(oldOfficer);
     this.newOfficer = document.querySelector(newOfficer);
-    this.items = items;
+    this.oldItems = this.oldOfficer.querySelectorAll(items);
+    this.newItems = this.newOfficer.querySelectorAll(items);
+    this.oldCounter = 0;
+    this.newCounter = 0;
   }
 
   _createClass(Diffrence, [{
-    key: "hideItems",
-    value: function hideItems() {
-      this.oldOfficer.querySelectorAll(this.items).array.forEach(function (item, i, arr) {
-        if (i !== arr.length - 1) {
-          item.style.display = 'none';
+    key: "bindTriggers",
+    value: function bindTriggers(officer, counter, items) {
+      officer.querySelector('.plus').addEventListener('click', function () {
+        if (counter !== items.length - 2) {
+          items[counter].style.display = 'flex';
+          counter++;
+        } else {
+          items[counter].style.display = 'flex';
+          items[items.length - 1].remove();
         }
       });
-      this.newOfficer.querySelectorAll(this.items).array.forEach(function (item, i, arr) {
+    }
+  }, {
+    key: "hideItems",
+    value: function hideItems(items) {
+      items.forEach(function (item, i, arr) {
         if (i !== arr.length - 1) {
           item.style.display = 'none';
         }
@@ -2852,7 +2864,10 @@ function () {
   }, {
     key: "init",
     value: function init() {
-      this.hideItems();
+      this.hideItems(this.oldItems);
+      this.hideItems(this.newItems);
+      this.bindTriggers(this.oldOfficer, this.oldCounter, this.oldItems);
+      this.bindTriggers(this.newOfficer, this.newCounter, this.newItems);
     }
   }]);
 
